@@ -20,6 +20,7 @@ class RedirectUser extends Component
                 default => redirect('/dashboard'),                        // Fallback
             },
             'frontdesk' => redirect()->route('frontdesk.dashboard', $user->department_id),
+            'faculty' => redirect()->route('family.family-dashboard'),
             // 'frontdesk' => match ($user->department_id) {
             //     1 => redirect()->route('store.dashboard'),
             //     2 => redirect()->route('fastfood.dashboard'),

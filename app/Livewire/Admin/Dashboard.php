@@ -3,6 +3,7 @@
 namespace App\Livewire\Admin;
 
 use Livewire\Component;
+use Illuminate\Support\Facades\Auth;
 use App\Models\Family;
 use App\Models\Charge;
 use App\Models\Department;
@@ -30,6 +31,9 @@ class Dashboard extends Component
 
     public function mount()
     {
+        if (!Auth::user()->isAdmin()) {
+            abort(403, 'Unauthorized access to Admin Dashboard.');
+        }
         $this->loadDashboardData();
     }
 

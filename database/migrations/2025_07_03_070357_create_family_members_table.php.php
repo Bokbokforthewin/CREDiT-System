@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('family_id')->constrained()->onDelete('cascade');
             $table->string('name');
-            $table->string('rfid_code')->unique();
+            $table->string('rfid_code')->unique()->nullable();
             $table->string('email')->nullable();
             $table->enum('role', ['head', 'member']);
             $table->timestamps();

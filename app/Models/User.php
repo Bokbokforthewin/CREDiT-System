@@ -91,6 +91,10 @@ class User extends Authenticatable
     {
         return $this->isBusinessOffice() && $this->business_role === 'limits';
     }
+    public function isFaculty()
+    {
+        return $this->usertype === 'faculty';
+    }
     public function auditLogs()
     {
         return $this->hasMany(AuditLog::class);

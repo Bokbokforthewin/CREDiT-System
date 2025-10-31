@@ -34,7 +34,7 @@ class Dashboard extends Component
     public function mount()
     {
         if (auth()->user()->business_role !== 'limits') {
-            abort(403);
+            abort(403, 'Unauthorized access to Business Office Limits Dashboard.');
         }
         $this->selectedMonth = now()->month;
         $this->selectedYear = now()->year;

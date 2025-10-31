@@ -153,139 +153,108 @@
         </div>
     </div>
 
-    <!-- Manual Entry Section -->
-    @if ($showManualEntry)
-        <div class="max-w-7xl mx-auto mb-6 sm:mb-8">
-            <div class="glass-card rounded-2xl sm:rounded-3xl p-4 sm:p-6 lg:p-8 hover-lift">
-                <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6 sm:mb-8 gap-4">
-                    <h3 class="text-xl sm:text-2xl font-bold text-white flex items-center">
-                        <div
-                            class="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-br from-green-500 to-green-600 rounded-lg flex items-center justify-center mr-3 sm:mr-4 flex-shrink-0">
-                            <svg class="w-4 h-4 sm:w-5 sm:h-5 text-white" fill="none" stroke="currentColor"
-                                viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z">
-                                </path>
-                            </svg>
-                        </div>
-                        Manual Charge Entry
-                    </h3>
-                    <button wire:click="resetToRfidScan"
-                        class="text-yellow-400 hover:text-yellow-300 font-semibold text-base sm:text-lg transition-colors duration-200 flex items-center whitespace-nowrap">
-                        <svg class="w-4 h-4 sm:w-5 sm:h-5 mr-2 flex-shrink-0" fill="none" stroke="currentColor"
-                            viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
-                        </svg>
-                        Back to RFID Scan
-                    </button>
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
-                    <div class="relative">
-                        <label class="block text-white font-semibold mb-2 sm:mb-3 text-base sm:text-lg">Search
-                            Family</label>
-                        <input wire:model.live.debounce.300ms="family_search" type="text"
-                            class="w-full glass-input rounded-lg sm:rounded-xl px-4 sm:px-6 py-3 sm:py-4 text-white placeholder-blue-200 focus:outline-none text-base sm:text-lg"
-                            placeholder="Type family name to search..." autocomplete="off">
-
-                        <!-- Family Search Dropdown -->
-                        @if ($showFamilyDropdown && count($filteredFamilies) > 0)
-                            <div
-                                class="absolute z-10 w-full glass-card border border-white/30 rounded-lg sm:rounded-xl shadow-2xl mt-2 max-h-60 overflow-y-auto">
-                                @foreach ($filteredFamilies as $family)
-                                    <button
-                                        wire:click="selectFamily({{ $family->id }}, '{{ $family->family_name }}')"
-                                        class="w-full px-4 sm:px-6 py-3 sm:py-4 text-left text-white hover:bg-white/20 transition-colors duration-200 first:rounded-t-lg first:sm:rounded-t-xl last:rounded-b-lg last:sm:rounded-b-xl">
-                                        <p class="font-medium text-base">{{ $family->family_name }}</p>
-                                        <p class="text-xs sm:text-sm text-blue-200">Family ID: {{ $family->id }}</p>
-                                    </button>
-                                @endforeach
-                            </div>
-                        @elseif($showFamilyDropdown && !empty($family_search) && count($filteredFamilies) == 0)
-                            <div
-                                class="absolute z-10 w-full glass-card border border-white/30 rounded-lg sm:rounded-xl shadow-xl mt-2">
-                                <div class="px-4 sm:px-6 py-3 sm:py-4 text-blue-200 text-sm sm:text-base">
-                                    No families found matching "{{ $family_search }}"
-                                </div>
-                            </div>
-                        @endif
-                    </div>
-
-                    @if ($selected_family_id)
-                        <div>
-                            <label class="block text-white font-semibold mb-2 sm:mb-3 text-base sm:text-lg">Select
-                                Member</label>
-                            <select wire:model.lazy="selected_member_id"
-                                class="w-full glass-input rounded-lg sm:rounded-xl px-4 sm:px-6 py-3 sm:py-4 text-black focus:outline-none text-base sm:text-lg appearance-none bg-white/20 text-white">
-                                <option value="" class="text-black">-- Choose Member --</option>
-                                @foreach ($familyMembers as $fm)
-                                    <option value="{{ $fm->id }}" class="text-black">
-                                        {{ $fm->name }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                    @endif
-                </div>
-            </div>
-        </div>
-    @endif
-
-    @if ($member)
-        <!-- Member Information -->
-        <div class="max-w-7xl mx-auto mb-6 sm:mb-8">
-            <div
-                class="glass-card rounded-2xl sm:rounded-3xl p-4 sm:p-6 lg:p-8 border border-yellow-400/30 hover-lift">
-                <h3 class="text-xl sm:text-2xl font-bold text-yellow-400 mb-4 sm:mb-6 flex items-center">
+<!-- Manual Entry Section -->
+@if ($showManualEntry)
+    <div class="max-w-7xl mx-auto mb-6 sm:mb-8">
+        <div class="glass-card rounded-2xl sm:rounded-3xl p-4 sm:p-6 lg:p-8 hover-lift">
+            <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6 sm:mb-8 gap-4">
+                <h3 class="text-xl sm:text-2xl font-bold text-white flex items-center">
                     <div
-                        class="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-lg flex items-center justify-center mr-3 sm:mr-4 flex-shrink-0">
+                        class="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-br from-green-500 to-green-600 rounded-lg flex items-center justify-center mr-3 sm:mr-4 flex-shrink-0">
                         <svg class="w-4 h-4 sm:w-5 sm:h-5 text-white" fill="none" stroke="currentColor"
                             viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                                d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z">
+                            </path>
                         </svg>
                     </div>
-                    Member Information
+                    Manual Charge Entry
                 </h3>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
-                    <div class="space-y-3 sm:space-y-4">
-                        <div>
-                            <span class="text-blue-200 font-medium text-sm sm:text-base">Name:</span>
-                            <p class="text-white text-lg sm:text-xl font-semibold">{{ $member->name }}</p>
+                <button wire:click="resetToRfidScan"
+                    class="text-yellow-400 hover:text-yellow-300 font-semibold text-base sm:text-lg transition-colors duration-200 flex items-center whitespace-nowrap">
+                    <svg class="w-4 h-4 sm:w-5 sm:h-5 mr-2 flex-shrink-0" fill="none" stroke="currentColor"
+                        viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+                    </svg>
+                    Back to RFID Scan
+                </button>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+                <div class="relative">
+                    <label class="block text-white font-semibold mb-2 sm:mb-3 text-base sm:text-lg">Search
+                        Family</label>
+                    <input wire:model.live.debounce.300ms="family_search" type="text"
+                        class="w-full glass-input rounded-lg sm:rounded-xl px-4 sm:px-6 py-3 sm:py-4 text-white placeholder-blue-200 focus:outline-none text-base sm:text-lg"
+                        placeholder="Type family name to search..." autocomplete="off">
+
+                    <!-- Family Search Dropdown -->
+                    @if ($showFamilyDropdown && count($filteredFamilies) > 0)
+                        <div
+                            class="absolute z-10 w-full glass-card border border-white/30 rounded-lg sm:rounded-xl shadow-2xl mt-2 max-h-60 overflow-y-auto">
+                            @foreach ($filteredFamilies as $family)
+                                <button
+                                    wire:click="selectFamily({{ $family->id }}, '{{ $family->family_name }}')"
+                                    class="w-full px-4 sm:px-6 py-3 sm:py-4 text-left text-white hover:bg-white/20 transition-colors duration-200 first:rounded-t-lg first:sm:rounded-t-xl last:rounded-b-lg last:sm:rounded-b-xl">
+                                    <p class="font-medium text-base">{{ $family->family_name }}</p>
+                                    <p class="text-xs sm:text-sm text-blue-200">Family ID: {{ $family->id }}</p>
+                                </button>
+                            @endforeach
                         </div>
-                        <div>
-                            <span class="text-blue-200 font-medium text-sm sm:text-base">Role:</span>
-                            <p class="text-white text-lg sm:text-xl font-semibold">{{ $member->role }}</p>
+                    @elseif($showFamilyDropdown && !empty($family_search) && count($filteredFamilies) == 0)
+                        <div
+                            class="absolute z-10 w-full glass-card border border-white/30 rounded-lg sm:rounded-xl shadow-xl mt-2">
+                            <div class="px-4 sm:px-6 py-3 sm:py-4 text-blue-200 text-sm sm:text-base">
+                                No families found matching "{{ $family_search }}"
+                            </div>
                         </div>
-                    </div>
-                    <div class="space-y-3 sm:space-y-4">
-                        <div>
-                            <span class="text-blue-200 font-medium text-sm sm:text-base">Spending Limit:</span>
-                            @php
-                                $rule = $member->rules->firstWhere('department_id', auth()->user()->department_id);
-                            @endphp
-                            <p class="text-green-400 text-lg sm:text-xl font-bold">
-                                {{ $rule && $rule->spending_limit !== null ? '₱' . number_format($rule->spending_limit, 2) : 'None' }}
-                            </p>
-                        </div>
-                        <div>
-                            <span class="text-blue-200 font-medium text-sm sm:text-base">Status:</span>
-                            <div class="mt-1">
-                                <span
-                                    class="inline-flex px-3 sm:px-4 py-1 sm:py-2 rounded-full text-xs sm:text-sm font-semibold {{ $rule && $rule->is_restricted ? 'bg-red-500/20 text-red-400 border border-red-400/30' : 'bg-green-500/20 text-green-400 border border-green-400/30' }}">
-                                    {{ $rule && $rule->is_restricted ? 'Restricted' : 'Allowed' }}
-                                </span>
+                    @endif
+                </div>
+
+                @if ($selected_family_id)
+                    <div>
+                        <label class="block text-white font-semibold mb-2 sm:mb-3 text-base sm:text-lg">Select
+                            Member</label>
+                        <div class="relative">
+                            <select wire:model.lazy="selected_member_id"
+                                class="w-full glass-input rounded-lg sm:rounded-xl pl-4 pr-12 py-3 sm:py-4 text-white focus:outline-none text-base sm:text-lg appearance-none bg-white/20">
+                                <option value="" class="text-black">-- Choose Member --</option>
+                                @foreach ($familyMembers as $fm)
+                                    @php
+                                        // Calculate rule, limit, and status for display in the option text
+                                        $rule = $fm->rules->firstWhere('department_id', auth()->user()->department_id);
+                                        $spending_limit_text = $rule && $rule->spending_limit !== null ? '₱' . number_format($rule->spending_limit, 2) : 'None';
+                                        $status_text = $rule && $rule->is_restricted ? 'Restricted' : 'Allowed';
+                                    @endphp
+                                    <option value="{{ $fm->id }}" class="text-black">
+                                        {{ $fm->name }} 
+                                    </option>
+                                @endforeach
+                            </select>
+                            <!-- Custom dropdown indicator to maintain styling -->
+                            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-white/70">
+                                <svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                </svg>
                             </div>
                         </div>
                     </div>
-                </div>
+                @endif
             </div>
         </div>
+    </div>
+@endif
 
-        <!-- Charge Details -->
-        <div class="max-w-7xl mx-auto mb-6 sm:mb-8">
-            <div class="glass-card rounded-2xl sm:rounded-3xl p-4 sm:p-6 lg:p-8 hover-lift">
-                <h3 class="text-xl sm:text-2xl font-bold text-white mb-4 sm:mb-6 flex items-center">
+<!-- Removed the redundant Member Information card that was here -->
+
+@if ($member)
+    <!-- Charge Details with Highly Visible Member Status/Limit -->
+    <div class="max-w-7xl mx-auto mb-6 sm:mb-8">
+        <div class="glass-card rounded-2xl sm:rounded-3xl p-4 sm:p-6 lg:p-8 hover-lift">
+            <!-- Header Section -->
+            <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 mb-6 sm:mb-8">
+                <div class="flex items-center">
                     <div
                         class="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-br from-purple-500 to-purple-600 rounded-lg flex items-center justify-center mr-3 sm:mr-4 flex-shrink-0">
                         <svg class="w-4 h-4 sm:w-5 sm:h-5 text-white" fill="none" stroke="currentColor"
@@ -295,35 +264,69 @@
                             </path>
                         </svg>
                     </div>
-                    Charge Details
-                </h3>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 mb-6 sm:mb-8">
                     <div>
-                        <label
-                            class="block text-white font-semibold mb-2 sm:mb-3 text-base sm:text-lg">Description</label>
-                        <input wire:model="description" type="text"
-                            class="w-full glass-input rounded-lg sm:rounded-xl px-4 sm:px-6 py-3 sm:py-4 text-white placeholder-blue-200 focus:outline-none text-base sm:text-lg"
-                            placeholder="Enter charge description">
-                    </div>
-
-                    <div>
-                        <label class="block text-white font-semibold mb-2 sm:mb-3 text-base sm:text-lg">Price
-                            (₱)</label>
-                        <input wire:model="price" type="number" step="0.01"
-                            class="w-full glass-input rounded-lg sm:rounded-xl px-4 sm:px-6 py-3 sm:py-4 text-white placeholder-blue-200 focus:outline-none text-base sm:text-lg"
-                            placeholder="0.00">
+                        <span class="text-xl sm:text-2xl font-bold text-white">Charge Details for </span>
+                        <span class="text-xl sm:text-2xl font-bold text-yellow-300">{{ $member->name }}</span>
+                        <p class="text-blue-200 text-sm sm:text-base mt-1">{{ $member->role }}</p>
                     </div>
                 </div>
 
-                <div class="text-center">
-                    <button wire:click="submitCharge"
-                        class="w-full sm:w-auto px-8 sm:px-12 py-3 sm:py-4 bg-gradient-to-r from-purple-600 to-purple-700 text-white rounded-lg sm:rounded-xl hover:from-purple-700 hover:to-purple-800 transition-all duration-200 font-bold text-lg sm:text-xl shadow-xl hover:shadow-2xl transform hover:scale-105">
-                        Submit Charge
-                    </button>
+                <!-- Member Status & Limit - ENHANCED VISIBILITY -->
+                @php
+                    $rule = $member->rules->firstWhere('department_id', auth()->user()->department_id);
+                    $is_restricted = $rule && $rule->is_restricted;
+                    $spending_limit_text = $rule && $rule->spending_limit !== null ? '₱' . number_format($rule->spending_limit, 2) : 'None';
+                    $status_text = $is_restricted ? 'Restricted' : 'Allowed';
+                @endphp
+                <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 sm:gap-6 w-full lg:w-auto">
+                    
+                    <!-- Status Badge -->
+                    <div class="flex-1 min-w-0 p-3 sm:p-8 rounded-xl text-center shadow-lg transform transition-all duration-300 {{ $is_restricted ? 'bg-red-900/40 border border-red-500/50 hover:shadow-red-500/30' : 'bg-green-900/40 border border-green-500/50 hover:shadow-green-500/30' }}">
+                        <span class="text-white font-medium text-xs sm:text-sm uppercase tracking-wider block opacity-70 mb-1">Status</span>
+                        <span class="text-xl sm:text-2xl font-extrabold block {{ $is_restricted ? 'text-red-400' : 'text-green-400' }}">
+                            {{ $status_text }}
+                        </span>
+                    </div>
+
+                    <!-- Spending Limit Display -->
+                    <div class="flex-1 min-w-0 p-3 sm:p-6 rounded-xl text-center shadow-lg bg-blue-900/40 border border-blue-500/50 transform transition-all duration-300 hover:shadow-blue-500/30">
+                        <span class="text-white font-medium text-xs sm:text-sm uppercase tracking-wider block opacity-70 mb-1">Spending Limit</span>
+                        <span class="text-xl sm:text-2xl font-extrabold text-blue-300 block">
+                            {{ $spending_limit_text }}
+                        </span>
+                    </div>
+                </div>
+                <!-- End Member Status & Limit -->
+            </div>
+
+            <!-- Charge Inputs -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 mb-6 sm:mb-8">
+                <div>
+                    <label class="block text-white font-semibold mb-2 sm:mb-3 text-base sm:text-lg">Description</label>
+                    <input wire:model="description" type="text"
+                        class="w-full glass-input rounded-lg sm:rounded-xl px-4 sm:px-6 py-3 sm:py-4 text-white placeholder-blue-200 focus:outline-none text-base sm:text-lg"
+                        placeholder="Enter charge description">
+                </div>
+
+                <div>
+                    <label class="block text-white font-semibold mb-2 sm:mb-3 text-base sm:text-lg">Price (₱)</label>
+                    <input wire:model="price" type="number" step="0.01"
+                        class="w-full glass-input rounded-lg sm:rounded-xl px-4 sm:px-6 py-3 sm:py-4 text-white placeholder-blue-200 focus:outline-none text-base sm:text-lg"
+                        placeholder="0.00">
                 </div>
             </div>
+
+            <!-- Submit Button -->
+            <div class="text-center">
+                <button wire:click="submitCharge"
+                    class="w-full sm:w-auto px-8 sm:px-12 py-3 sm:py-4 bg-gradient-to-r from-purple-600 to-purple-700 text-white rounded-lg sm:rounded-xl hover:from-purple-700 hover:to-purple-800 transition-all duration-200 font-bold text-lg sm:text-xl shadow-xl hover:shadow-2xl transform hover:scale-105">
+                    Submit Charge
+                </button>
+            </div>
         </div>
-    @endif
+    </div>
+@endif
+
 
     <!-- Charge Confirmation Modal -->
     @if ($showConfirmationModal)
@@ -498,9 +501,17 @@
 
     <!-- Flash Messages -->
     @if (session()->has('success'))
-        <div class="fixed top-4 right-4 z-50 max-w-sm">
-            <div
-                class="bg-gradient-to-r from-green-500 to-green-600 text-white px-4 sm:px-6 py-3 sm:py-4 rounded-lg sm:rounded-xl shadow-2xl flex items-center space-x-3">
+    <div x-data="{ show: true }" 
+         x-show="show"
+         x-init="setTimeout(() => show = false, 5000)"
+         x-transition:enter="transition ease-out duration-300"
+         x-transition:enter-start="opacity-0 transform translate-x-full"
+         x-transition:enter-end="opacity-100 transform translate-x-0"
+         x-transition:leave="transition ease-in duration-500"
+         x-transition:leave-start="opacity-100 transform translate-x-0"
+         x-transition:leave-end="opacity-0 transform translate-x-full"
+         class="fixed top-4 right-4 z-50 max-w-sm">
+        <div class="bg-gradient-to-r from-green-500 to-green-600 text-white px-4 sm:px-6 py-3 sm:py-4 rounded-lg sm:rounded-xl shadow-2xl flex items-center space-x-3">
                 <svg class="w-5 h-5 sm:w-6 sm:h-6 flex-shrink-0" fill="none" stroke="currentColor"
                     viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
@@ -511,9 +522,17 @@
     @endif
 
     @if (session()->has('error'))
-        <div class="fixed top-4 right-4 z-50 max-w-sm">
-            <div
-                class="bg-gradient-to-r from-red-500 to-red-600 text-white px-4 sm:px-6 py-3 sm:py-4 rounded-lg sm:rounded-xl shadow-2xl flex items-center space-x-3">
+           <div x-data="{ show: true }" 
+         x-show="show"
+         x-init="setTimeout(() => show = false, 5000)"
+         x-transition:enter="transition ease-out duration-300"
+         x-transition:enter-start="opacity-0 transform translate-x-full"
+         x-transition:enter-end="opacity-100 transform translate-x-0"
+         x-transition:leave="transition ease-in duration-500"
+         x-transition:leave-start="opacity-100 transform translate-x-0"
+         x-transition:leave-end="opacity-0 transform translate-x-full"
+         class="fixed top-4 right-4 z-50 max-w-sm">
+                <div class="bg-gradient-to-r from-red-500 to-red-600 text-white px-4 sm:px-6 py-3 sm:py-4 rounded-lg sm:rounded-xl shadow-2xl flex items-center space-x-3">
                 <svg class="w-5 h-5 sm:w-6 sm:h-6 flex-shrink-0" fill="none" stroke="currentColor"
                     viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
@@ -683,19 +702,19 @@
         updateTime();
         setInterval(updateTime, 1000);
 
-        // Auto-hide flash messages after 5 seconds
-        document.addEventListener('DOMContentLoaded', function() {
-            const flashMessages = document.querySelectorAll('[class*="fixed top-4 right-4"]');
-            flashMessages.forEach(message => {
-                setTimeout(() => {
-                    message.style.opacity = '0';
-                    message.style.transform = 'translateX(100%)';
-                    setTimeout(() => {
-                        message.remove();
-                    }, 300);
-                }, 5000);
-            });
-        });
+        // // Auto-hide flash messages after 5 seconds
+        // document.addEventListener('DOMContentLoaded', function() {
+        //     const flashMessages = document.querySelectorAll('[class*="fixed top-4 right-4"]');
+        //     flashMessages.forEach(message => {
+        //         setTimeout(() => {
+        //             message.style.opacity = '0';
+        //             message.style.transform = 'translateX(100%)';
+        //             setTimeout(() => {
+        //                 message.remove();
+        //             }, 300);
+        //         }, 5000);
+        //     });
+        // });
 
         // Improve mobile touch experience
         if ('ontouchstart' in window) {

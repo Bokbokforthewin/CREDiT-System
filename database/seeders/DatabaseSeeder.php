@@ -26,6 +26,7 @@ class DatabaseSeeder extends Seeder
             FamilyMemberSeeder::class,
             MemberDepartmentRuleSeeder::class,
             AdminSeeder::class,
+            FacultySeeder::class,
 
         ]);
     }

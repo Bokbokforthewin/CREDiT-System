@@ -14,7 +14,7 @@
                     </div>
                     <div class="min-w-0 flex-1">
                         <h1 class="text-2xl sm:text-3xl lg:text-4xl font-bold text-white mb-1 sm:mb-2 leading-tight">
-                            <span class="text-yellow-400">Charge Management</span> 
+                            <span class="text-white">Charge <span class="text-yellow-400">Management</span> 
                             <span class="text-blue-200 text-lg block sm:inline">- {{ $department->name }}</span>
                         </h1>
                         <p class="text-blue-200 text-base sm:text-lg">Manage department charges and billing preparation</p>

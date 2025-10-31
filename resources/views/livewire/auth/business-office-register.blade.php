@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Business Office Registration | CREDiT @ CPAC</title>
+    <title>Register | CREDiT @ CPAC</title>
     <link rel="icon" href="{{ asset('images/cpac logo.png') }}" type="image/png">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <style>
@@ -14,6 +14,18 @@
             background-repeat: no-repeat;
             background-attachment: fixed;
         }
+        select {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23bfdbfe' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+            background-position: right 0.75rem center;
+            background-repeat: no-repeat;
+            background-size: 1.5em 1.5em;
+            background-color: rgba(255, 255, 255, 0.1) !important;
+        }
+        select option {
+            background-color: rgb(12, 46, 96);
+            color: white;
+        }
     </style>
 </head>
 <body class="bg-overlay min-h-screen flex flex-col text-white font-sans antialiased">
@@ -21,16 +33,17 @@
     <div class="flex items-center justify-center min-h-screen p-4">
         <div class="w-full max-w-md">
             {{-- Logo --}}
-            <div class="text-center mb-6">
+            <div class="text-center mb-4">
                 <img src="{{ asset('images/cpac_logo_with_name.png') }}" 
                      alt="Central Philippine Adventist College Logo" 
-                     class="w-48 mx-auto mb-4">
+                     class="w-48 mx-auto mb-2">
                 <h1 class="text-3xl font-bold text-yellow-400">CREDiT</h1>
-                <p class="text-blue-200 text-lg">Business Office Registration</p>
+                <p class="text-blue-200 text-sm">Departmental Charging System</p>
             </div>
 
             {{-- Card --}}
             <div class="bg-white/10 backdrop-blur-md border border-white/20 rounded-xl shadow-xl overflow-hidden p-6">
+                <h2 class="text-xl font-bold text-center mb-4 text-yellow-400">Register an Account</h2>
                 @if(session('success'))
                     <div class="mb-6 bg-green-500/20 border border-green-500/30 rounded-lg p-4 text-green-100 text-center">
                         {{ session('success') }}
@@ -84,7 +97,7 @@
                         <select
                             wire:model="business_role"
                             id="business_role"
-                            class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md">
+                            class="mt-1 block w-full pl-3 pr-10 py-2 text-sm border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md">
                             <option value="">Select Staff Type</option>
                             <option value="limits">Limits Staff (Bookkeeper/ Accountant)</option>
                             <option value="reports">Reports Staff</option>
@@ -92,20 +105,17 @@
                         @error('business_role') <span class="text-red-500 text-xs">Already has an account</span> @enderror
                     </div>
 
-                    <div class="flex items-center justify-between pt-4">
-                        <a href="{{ route('login') }}" 
-                           class="text-blue-200 hover:text-yellow-300 text-sm font-medium transition-colors">
-                            Already registered?
-                        </a>
-
-                        <button type="submit" 
-                                class="bg-yellow-400 hover:bg-yellow-300 text-blue-900 px-6 py-2 rounded-lg font-semibold transition-colors flex items-center gap-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                                <path fill-rule="evenodd" d="M6 6V5a3 3 0 013-3h2a3 3 0 013 3v1h2a2 2 0 012 2v3.57A22.952 22.952 0 0110 13a22.95 22.95 0 01-8-1.43V8a2 2 0 012-2h2zm2-1a1 1 0 011-1h2a1 1 0 011 1v1H8V5zm1 5a1 1 0 011-1h.01a1 1 0 110 2H10a1 1 0 01-1-1z" clip-rule="evenodd" />
-                                <path d="M2 13.692V16a2 2 0 002 2h12a2 2 0 002-2v-2.308A24.974 24.974 0 0110 15c-2.796 0-5.487-.46-8-1.308z" />
-                            </svg>
+                    <button type="submit" 
+                                class="w-full bg-yellow-400 hover:bg-yellow-300 text-blue-900 px-6 py-2 rounded-lg font-semibold text-sm transition-colors flex items-center justify-flex justify-center gap-2">
                             Register (Business Office)
                         </button>
+
+                    <div class="mt-4 pt-3 border-t border-white/20 text-center text-xs text-blue-200">
+                        <p>Already registered?
+                        <a href="{{ route('login') }}" 
+                        class="text-yellow-300 hover:underline">Sign in</a>
+                        </p>
+
                     </div>
                 </form>
             </div>

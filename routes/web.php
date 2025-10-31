@@ -3,6 +3,7 @@
 use App\Livewire\Admin\FullChargeView as FullChargeView;
 use Illuminate\Support\Facades\Route;
 use App\Livewire\Auth\BusinessOfficeRegister;
+use App\Livewire\Auth\FamilyRegister;
 use App\Livewire\RedirectUser;
 use App\Livewire\Business\Dashboard as BusinessDashboard;
 use App\Livewire\Business\ReportsDashboard as ReportsDashboard;
@@ -13,6 +14,8 @@ use App\Livewire\Business\LimitsAndRestrictions as LimitsAndRestrictions;
 use App\Livewire\Business\AuditSection as AuditSection;
 use App\Livewire\Frontdesk\ChargeManagement as ChargeManagement;
 use App\Livewire\Frontdesk\UniversalDashboard;
+use App\Livewire\Family\FamilyDashboard as FamilyDashboard;
+use App\Livewire\Family\EditLimitsAndRestrictions as EditLimitsAndRestrictions;
 
 // Frontdesk Dashboards
 use App\Livewire\Store\Dashboard as StoreDashboard;
@@ -30,6 +33,11 @@ Route::get('/', function () {
 Route::get('/register/business-office', BusinessOfficeRegister::class)
     ->middleware('guest')
     ->name('business.register');
+
+// ✅ Family Registration Page
+Route::get('/register/family', FamilyRegister::class)
+    ->middleware('guest')
+    ->name('family.register');
 
 // ✅ Login Redirect Handler
 Route::get('/livewire-login-handler', RedirectUser::class)
@@ -71,6 +79,12 @@ Route::middleware([
 
     Route::get('/business/audit-section', AuditSection::class)
     ->name('business.auditsection');
+
+    Route::get('/family/dashboard', FamilyDashboard::class)
+        ->name('family.family-dashboard');
+
+    Route::get('family/edit-limits-and-restrictions', EditLimitsAndRestrictions::class)
+    ->name('family.editlimitsandrestrictions');
 
     Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/frontdesk/{department}', UniversalDashboard::class)

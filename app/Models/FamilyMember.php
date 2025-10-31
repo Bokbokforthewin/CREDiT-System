@@ -9,11 +9,16 @@ class FamilyMember extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['family_id', 'name', 'rfid_code', 'email', 'role'];
+    protected $fillable = ['family_id', 'name', 'rfid_code', 'email', 'role', 'user_id'];
 
     public function family()
     {
         return $this->belongsTo(Family::class);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 
     public function rules()
@@ -32,5 +37,9 @@ class FamilyMember extends Model
     public function auditLogs()
     {
         return $this->morphMany(AuditLog::class, 'auditable');
+    }
+    public function head()
+    {
+        return $this->belongsTo(User::class, 'user_id');
     }
 }

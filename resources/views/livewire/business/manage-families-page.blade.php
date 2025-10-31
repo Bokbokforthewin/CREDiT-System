@@ -312,6 +312,54 @@
                             </div>
                         @enderror
                     </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-blue-200 mb-3">Head of the family Name:</label>
+                        <input type="text"
+                               wire:model.defer="newMemberName"
+                               class="w-full glass-input rounded-xl px-4 py-3 text-white placeholder-blue-200 focus:outline-none text-base"
+                               placeholder="Enter Head of the Family Name...">
+                        @error('newAccountCode')
+                            <div class="flex items-center mt-2">
+                                <svg class="w-4 h-4 text-red-400 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                                <span class="text-red-400 text-sm">{{ $message }}</span>
+                            </div>
+                        @enderror
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-blue-200 mb-3">Email Address</label>
+                        <input type="text"
+                               wire:model.defer="newMemberEmail"
+                               class="w-full glass-input rounded-xl px-4 py-3 text-white placeholder-blue-200 focus:outline-none text-base"
+                               placeholder="Enter Email Address...">
+                        @error('newAccountCode')
+                            <div class="flex items-center mt-2">
+                                <svg class="w-4 h-4 text-red-400 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                                <span class="text-red-400 text-sm">{{ $message }}</span>
+                            </div>
+                        @enderror
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-blue-200 mb-3">RFID Code</label>
+                        <input type="text"
+                               wire:model.defer="newMemberRfid"
+                               class="w-full glass-input rounded-xl px-4 py-3 text-white placeholder-blue-200 focus:outline-none text-base"
+                               placeholder="Enter RFID Code...">
+                        @error('newAccountCode')
+                            <div class="flex items-center mt-2">
+                                <svg class="w-4 h-4 text-red-400 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                                <span class="text-red-400 text-sm">{{ $message }}</span>
+                            </div>
+                        @enderror
+                    </div>
+                    <div>
+                        <h1 class="block text-medium font-semibold text-blue-200 mb-3">Note: Password will be the Default Password, ask Family Head to Change Passowrd for their account</h1>
+                    </div>
                 </div>
 
                 <div class="flex flex-col-reverse sm:flex-row justify-end gap-3">

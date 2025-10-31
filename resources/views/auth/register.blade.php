@@ -43,7 +43,7 @@
 
             {{-- Card --}}
             <div class="bg-white/10 backdrop-blur-md border border-white/20 rounded-xl shadow-xl overflow-hidden p-6">
-                <h2 class="text-xl font-bold text-center mb-4 text-yellow-300">Create Account</h2>
+                <h2 class="text-xl font-bold text-center mb-4 text-yellow-400">CPAC Departments Registration</h2>
                 
                 <x-validation-errors class="mb-4 bg-red-500/20 border border-red-500/30 rounded-lg p-3 text-sm" />
 
@@ -143,8 +143,8 @@
                 </div>
             </div>
 
-            <div class="mt-4 text-center text-xs text-blue-300">
-                <p>CREDiT @ CPAC</p>
+            <div class="mt-4 text-center text-medium font-light text-blue-300">
+                <p>CREDiT @ Central Philippine Adventist College</p>
             </div>
         </div>
     </div>

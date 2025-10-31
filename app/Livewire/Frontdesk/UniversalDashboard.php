@@ -46,6 +46,9 @@ class UniversalDashboard extends Component
 
     public function mount(Department $department)
     {
+        if (Auth::user()->department_id !== $this->department->id) {
+            abort(403, 'Unauthorized access to this department');
+        }
         $this->department = $department;
     }
 

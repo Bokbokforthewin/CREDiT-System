@@ -1,18 +1,22 @@
 <?php
 
-namespace App\Livewire\Business;
+namespace App\Livewire\Family;
 
 use Livewire\Component;
 use App\Models\Family;
 use App\Models\FamilyMember;
 use App\Models\Department;
 use App\Models\MemberDepartmentRule;
-use App\Traits\Auditable; // <-- Added trait import
+use App\Traits\Auditable;
+use Illuminate\Support\Facades\Auth; // Added Auth import
 
-class LimitsAndRestrictions extends Component
+class EditLimitsAndRestrictions extends Component
 {
-    use Auditable; // <-- Added trait usage
+    use Auditable;
 
+    public $currentFamilyId;
+    public $currentFamilyName;
+    
     public $limitSearch = '';
     public $selectedMemberId = null;
     public $selectedMember = null;
@@ -25,10 +29,23 @@ class LimitsAndRestrictions extends Component
 
     public function mount()
     {
+        $userId = Auth::id(); // Get the ID of the logged-in user
 
-        if (auth()->user()->usertype !== 'business_office' && auth()->user()->business_role !== 'limits') {
-            abort(403, 'Unauthorized access to Limits And Restrictions Management.');
+        // 1. Explicitly find the FamilyMember record linked by the user_id foreign key.
+        $familyMember = FamilyMember::where('user_id', $userId)->first();
+
+        // 2. Check if the FamilyMember exists AND is linked to a family (has family_id set).
+        if ($familyMember && $familyMember->family_id) {
+            $this->currentFamilyId = $familyMember->family_id;
+            
+            $family = Family::find($this->currentFamilyId);
+            $this->currentFamilyName = $family->family_name ?? 'Your Family';
+
+        } else {
+            // Abort if the logged-in user is not associated with a FamilyMember/Family
+            abort(403, 'Access Denied: Your account is not configured as a Family Head or linked to a Family Account.');
         }
+
         $this->loadDepartments();
         $this->loadMembers();
     }
@@ -42,11 +59,14 @@ class LimitsAndRestrictions extends Component
     }
 
     /**
-     * Load all members
+     * Load members ONLY from the current logged-in family
      */
     public function loadMembers()
     {
-        $this->members = FamilyMember::with(['rules', 'family'])->get();
+        // Query scoped by the authenticated user's family ID
+        $this->members = FamilyMember::where('family_id', $this->currentFamilyId)
+            ->with(['rules', 'family'])
+            ->get();
     }
 
     /**
@@ -60,19 +80,11 @@ class LimitsAndRestrictions extends Component
             return;
         }
 
-        // Search both by member name and family name
-        $memberResults = $this->members->filter(function ($member) {
+        // Search only by member name within the current family's pre-filtered collection.
+        $this->searchResults = $this->members->filter(function ($member) {
             return str_contains(strtolower($member->name), strtolower($this->limitSearch));
-        });
-
-        $familyResults = Family::where('family_name', 'like', '%' . $this->limitSearch . '%')
-            ->with('members')
-            ->get()
-            ->flatMap(function ($family) {
-                return $family->members;
-            });
-
-        $this->searchResults = $memberResults->merge($familyResults)->unique('id')->take(8);
+        })->take(8);
+        
         $this->showDropdown = $this->searchResults->isNotEmpty();
     }
 
@@ -82,7 +94,10 @@ class LimitsAndRestrictions extends Component
     public function selectMember($memberId)
     {
         $this->selectedMemberId = $memberId;
-        $this->selectedMember = FamilyMember::with(['rules', 'family'])->find($memberId);
+        
+        $this->selectedMember = $this->members->firstWhere('id', $memberId) 
+                                ?? FamilyMember::with(['rules', 'family'])->find($memberId);
+        
         $this->showDropdown = false;
         $this->limitSearch = $this->selectedMember->name . ' (' . $this->selectedMember->family->family_name . ')';
         
@@ -151,13 +166,18 @@ class LimitsAndRestrictions extends Component
             return;
         }
 
+        // Final security check: Ensure the member being edited belongs to the current family
+        if ($this->selectedMember->family_id !== $this->currentFamilyId) {
+             session()->flash('error', 'Security violation: Cannot edit limits for a member outside your family.');
+             return;
+        }
+        
         foreach ($this->departments as $dept) {
             $rule = MemberDepartmentRule::firstOrNew([
                 'family_member_id' => $this->selectedMemberId,
                 'department_id' => $dept->id
             ]);
-
-            // Capture initial state before modification
+            
             $isNew = !$rule->exists;
             $oldRuleValues = $rule->exists ? $rule->getOriginal() : [];
             
@@ -169,28 +189,24 @@ class LimitsAndRestrictions extends Component
                 $rule->spending_limit = null;
                 $rule->original_limit = null;
             } else {
-                // FIX: Explicitly cast input to float or null to ensure change detection works reliably
                 $spendingLimit = trim($this->limits[$dept->id]['spending_limit']);
                 $originalLimit = trim($this->limits[$dept->id]['original_limit']);
 
-                // If the trimmed input is numeric, cast to float; otherwise, set to null.
                 $rule->spending_limit = is_numeric($spendingLimit) ? (float) $spendingLimit : null;
                 $rule->original_limit = is_numeric($originalLimit) ? (float) $originalLimit : null;
             }
 
             $rule->save();
 
-            // AUDIT: Log the rule creation or update
+            // AUDIT
             if ($isNew) {
-                // Log creation of a new limit/restriction rule
                 $this->logCreation($rule);
             } else {
-                // Log update to an existing rule (limit change, restriction status change, or limit removal)
                 $this->logUpdate($rule, $oldRuleValues);
             }
         }
 
-        
+        session()->flash('success', '✅ Rules updated successfully for ' . $this->selectedMember->name);
         $this->dispatch('rulesSaved');
         $this->clearSelection();
     }
@@ -205,7 +221,8 @@ class LimitsAndRestrictions extends Component
 
     public function render()
     {
-        return view('livewire.business.limits-and-restrictions')
-            ->layout('layouts.app');
+        return view('livewire.family.edit-limits-and-restrictions', [
+            'currentFamilyName' => $this->currentFamilyName
+        ])->layout('layouts.app');
     }
 }

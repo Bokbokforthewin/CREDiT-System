@@ -19,7 +19,7 @@
                 </div>
                  --}}
                 <!-- Logo Section -->
-                <div class="flex items-center space-x-3">
+                <a href="{{ route('dashboard') }}" class="flex items-center space-x-3">
                     <img src="{{ asset('images/cpac logo.png') }}" 
                          alt="CPAC Logo" 
                          class="h-10 w-10 md:h-12 md:w-12">
@@ -27,7 +27,7 @@
                         <h1 class="text-xl md:text-2xl font-bold text-yellow-400 tracking-tight">CREDiT</h1>
                         <p class="text-blue-200 text-xs md:text-sm font-medium hidden sm:block">Charging Records System</p>
                     </div>
-                </div>
+                </a>
             </div>
 
             <!-- User Profile Section -->
@@ -37,21 +37,21 @@
                     <div x-data="{ open: false }" class="relative" x-cloak>
                         <!-- Trigger Button -->
                         <button @click="open = !open" 
-                                class="flex items-center space-x-2 md:space-x-3 bg-white/10 backdrop-blur-sm hover:bg-white/20 px-3 py-1.5 md:px-4 md:py-2 rounded-full border border-white/20 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:ring-offset-2 focus:ring-offset-blue-900">
+                                class="flex justify-center items-center bg-white/20 backdrop-blur-sm hover:bg-white/30 px-1.5 py-1.5 md:px-4 md:py-2 rounded-full border border-white/20 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:ring-offset-2 focus:ring-offset-blue-900">
                             @if (Laravel\Jetstream\Jetstream::managesProfilePhotos())
-                                <img class="h-8 w-8 md:h-10 md:w-10 rounded-full object-cover border-2 border-yellow-400" 
+                                {{-- <img class="h-8 w-8 md:h-10 md:w-10 rounded-full object-cover border-2 border-yellow-400" 
                                      src="{{ Auth::user()->profile_photo_url }}" 
-                                     alt="{{ Auth::user()->name }}" />
+                                     alt="{{ Auth::user()->name }}" /> --}}
                             @else
-                                <div class="h-8 w-8 md:h-10 md:w-10 rounded-full bg-yellow-400 flex items-center justify-center">
-                                    <span class="text-blue-900 font-bold text-sm md:text-lg">{{ substr(Auth::user()->name, 0, 1) }}</span>
+                                <div class="h-8 w-8 md:h-10 md:w-10 rounded-full bg-yellow-400 flex items-center justify-center ">
+                                    <span class="text-blue-900 font-bold text-sm md:text-lg">{{ substr(Auth::user()->name ?? 'Unknown User', 0, 1) }}</span>
                                 </div>
                             @endif
-                            <div class="text-left hidden md:block">
-                                <p class="text-white font-semibold text-lg">{{ Auth::user()->name }}</p>
-                                <p class="text-blue-200 text-sm">{{ Auth::user()->email }}</p>
+                            <div class="text-left hidden md:block lg:px-3">
+                                <p class="text-white font-semibold text-lg">{{ Auth::user()->name ?? 'Unknown User' }}</p>
+                                <p class="text-blue-200 text-sm">{{ Auth::user()->email ?? 'Unknown User' }}</p>
                             </div>
-                            <svg class="h-4 w-4 md:h-5 md:w-5 text-blue-200 transition-transform duration-200" 
+                            <svg class="h-4 w-4 md:h-5 md:w-5 text-blue-200 transition-transform duration-200 hidden" 
                                  :class="{'rotate-180': open}"
                                  xmlns="http://www.w3.org/2000/svg" 
                                  fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -147,13 +147,13 @@
                     </div>
                 @else
                     <div class="h-10 w-10 rounded-full bg-yellow-400 flex items-center justify-center mr-3">
-                        <span class="text-blue-900 font-bold text-lg">{{ substr(Auth::user()->name, 0, 1) }}</span>
+                        <span class="text-blue-900 font-bold text-lg">{{ substr(Auth::user()->name ?? 'Unknown User', 0, 1) }}</span>
                     </div>
                 @endif
 
                 <div>
-                    <div class="font-semibold text-base text-white">{{ Auth::user()->name }}</div>
-                    <div class="font-medium text-xs text-blue-200">{{ Auth::user()->email }}</div>
+                    <div class="font-semibold text-base text-white">{{ Auth::user()->name ?? 'Unknown User' }}</div>
+                    <div class="font-medium text-xs text-blue-200">{{ Auth::user()->email ?? 'Unknown User' }}</div>
                 </div>
             </div>
 

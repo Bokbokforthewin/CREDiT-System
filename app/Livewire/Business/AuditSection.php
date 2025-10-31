@@ -10,6 +10,13 @@ class AuditSection extends Component
 {
     use WithPagination;
 
+    public function mount()
+    {
+        if (auth()->user()->business_role !== 'limits') {
+            abort(403, 'Unauthorized access to Audit Section.');
+        }
+    }
+
     // Filters for the audit log
     public $filters = [
         'search' => '',         // For searching user name or action

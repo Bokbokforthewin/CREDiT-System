@@ -29,18 +29,18 @@
     <nav class="px-4 py-4 sm:px-6 sm:py-5 lg:px-12">
         <div class="flex flex-col sm:flex-row justify-between items-center gap-4 sm:gap-0">
             <div class="text-center sm:text-left">
-                <h1 class="text-4xl sm:text-5xl lg:text-7xl font-bold tracking-tight">
+                <h1 class="text-7xl sm:text-5xl lg:text-7xl font-bold tracking-tight">
                     <span class="text-yellow-400">CREDiT</span>
                 </h1>
-                <p class="text-blue-200 text-sm sm:text-base lg:text-lg font-medium mt-1">Charging Records & Entry System</p>
+                <p class="text-blue-200 text-medium sm:text-base lg:text-lg font-medium mt-1">Charging Records & Entry System</p>
             </div>
             <div class="flex items-center space-x-3 sm:space-x-6">
                 <a href="{{ route('login') }}" 
-                   class="bg-white/10 hover:bg-white/30 backdrop-blur-md border border-white/20 px-4 sm:px-6 py-2 sm:py-3 rounded-full font-bold text-sm sm:text-base lg:text-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-blue-900">
+                   class="bg-white/10 hover:bg-white/30 backdrop-blur-md border border-white/20 px-6 sm:px-6 py-2.5 sm:py-3 rounded-full font-bold text-sm sm:text-base lg:text-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-blue-900">
                     Login
                 </a>
-                <a href="{{ route('register') }}" 
-                   class="bg-yellow-400 hover:bg-yellow-300 text-blue-900 px-4 sm:px-6 py-2 sm:py-3 rounded-full font-bold text-sm sm:text-base lg:text-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-blue-900">
+                <a href="{{ route('family.register') }}" 
+                   class="bg-yellow-400 hover:bg-yellow-300 text-blue-900 px-6 sm:px-6 py-3 sm:py-3 rounded-full font-bold text-sm sm:text-base lg:text-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-blue-900">
                     Register
                 </a>
             </div>
@@ -113,15 +113,15 @@
             </div>
 
             {{-- Manager info --}}
-            <div class="mt-8 sm:mt-10 pt-6 sm:pt-8 border-t border-white/20 flex items-center gap-3 sm:gap-4 lg:gap-5">
-                <img src="{{ asset('images/meme.png') }}" 
+            <a href="{{ route('register') }}" class="mt-8 sm:mt-10 pt-6 sm:pt-8 border-t border-white/20 flex items-center gap-3 sm:gap-4 lg:gap-5">
+                <img src="{{ asset('images/dev_dp.jpg') }}" 
                      alt="CPAC Logo" 
                      class="w-12 h-12 sm:w-14 sm:h-14 rounded-full border-2 border-yellow-400 object-cover flex-shrink-0">
                 <div>
                     <p class="font-semibold text-base sm:text-lg lg:text-xl">Lowell Rich Bernardino</p>
                     <p class="text-blue-200 text-sm sm:text-base lg:text-lg">CREDiT System Developer</p>
                 </div>
-            </div>
+            </a>
         </div>
     </main>
 

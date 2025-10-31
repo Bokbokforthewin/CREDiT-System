@@ -30,7 +30,7 @@ class DepartmentManagement extends Component
     {
         // Example authorization check
         if (auth()->user()->usertype !== 'business_office' && auth()->user()->business_role !== 'limits') {
-            abort(403);
+            abort(403, 'Unauthorized access to Department Management.');
         }
     }
 

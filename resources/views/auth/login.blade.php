@@ -31,7 +31,7 @@
 
             {{-- Card --}}
             <div class="bg-white/10 backdrop-blur-md border border-white/20 rounded-xl shadow-xl overflow-hidden p-6">
-                <h2 class="text-xl font-bold text-center mb-4 text-yellow-300">Sign In</h2>
+                <h2 class="text-xl font-bold text-center mb-4 text-yellow-400">Sign In</h2>
                 
                 <x-validation-errors class="mb-4 bg-red-500/20 border border-red-500/30 rounded-lg p-3 text-sm" />
 
@@ -93,14 +93,14 @@
 
                 {{-- Footer --}}
                 <div class="mt-4 pt-3 border-t border-white/20 text-center text-xs text-blue-200">
-                    <p>Need an account? <a href="{{ route('register') }}" class="text-yellow-300 hover:underline">Register</a></p>
+                    <p>Need an account? <a href="{{ route('family.register') }}" class="text-yellow-300 hover:underline">Register</a></p>
                 </div>
             </div>
 
             {{-- Copyright --}}
-            <div class="mt-4 text-center text-xs text-blue-300">
+            <footer class="mt-4 text-center text-medium font-light text-blue-300">
                 <p>CREDiT @ Central Philippine Adventist College</p>
-            </div>
+            </footer>
         </div>
     </div>
 

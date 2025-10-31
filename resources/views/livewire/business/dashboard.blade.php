@@ -259,6 +259,13 @@
                                 @endfor
                             </select>
                         </div>
+
+                        <div class="flex items-center space-x-2">
+
+                            <h4 class="text-medium sm:text-lg font-bold text-white">
+                                Total Charges: <span class="text-yellow-400">₱{{number_format($charges->sum('price'),2) }}</span></h4>
+
+                        </div>
                     </div>
                 </div>
 

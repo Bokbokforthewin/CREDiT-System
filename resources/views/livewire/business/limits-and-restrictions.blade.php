@@ -45,32 +45,7 @@
         </div>
     </div>
 
-    <!-- Flash Messages -->
-    @if (session()->has('success'))
-        <div class="max-w-7xl mx-auto mb-6">
-            <div class="glass-card rounded-xl p-4 border-l-4 border-green-400">
-                <div class="flex items-center">
-                    <svg class="w-6 h-6 text-green-400 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                    </svg>
-                    <span class="text-white font-semibold">{{ session('success') }}</span>
-                </div>
-            </div>
-        </div>
-    @endif
-
-    @if (session()->has('error'))
-        <div class="max-w-7xl mx-auto mb-6">
-            <div class="glass-card rounded-xl p-4 border-l-4 border-red-400">
-                <div class="flex items-center">
-                    <svg class="w-6 h-6 text-red-400 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                    </svg>
-                    <span class="text-white font-semibold">{{ session('error') }}</span>
-                </div>
-            </div>
-        </div>
-    @endif
+    
 
     <!-- Toast Messages -->
     <div class="max-w-7xl mx-auto mb-6">

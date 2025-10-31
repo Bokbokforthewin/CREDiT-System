@@ -5,11 +5,14 @@ namespace App\Livewire\Business;
 use Livewire\Component;
 use App\Models\Family;
 use App\Models\FamilyMember;
+use App\Models\User;
 use App\Models\Department;
 use App\Models\MemberDepartmentRule;
 use App\Traits\Auditable;
 use Livewire\WithPagination;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\DB;
 
 class ManageFamiliesPage extends Component
 {
@@ -38,29 +41,88 @@ class ManageFamiliesPage extends Component
     public $newAccountCode = '';
     public $deleteError = null;
 
+    // NEW PROPERTIES for the mandatory first member
+    public $newMemberName = '';
+    public $newMemberEmail = '';
+    public $newMemberRfid = '';
+    public function mount()
+    {
+        if (auth()->user()->business_role !== 'limits') {
+            abort(403, 'Unauthorized access to Family Management.');
+        }
+    }
+
     public function openAddModal()
     {
         $this->resetValidation();
         $this->newFamilyName = '';
         $this->newAccountCode = '';
+        // Reset new member fields
+        $this->newMemberName = '';
+        $this->newMemberEmail = '';
+        $this->newMemberRfid = '';
+        
         $this->showAddModal = true;
     }
 
     public function saveNewFamily()
     {
+        // Validation updated: email must be unique in 'users' table
         $this->validate([
+            // Family Validation
             'newFamilyName' => 'required|string|max:255|unique:families,family_name',
             'newAccountCode' => 'required|string|max:255|unique:families,account_code',
+            // Member Validation (for the Head/User)
+            'newMemberName' => 'required|string|max:255',
+            'newMemberEmail' => 'required|string|email|max:255|unique:users,email', // <-- VALIDATED AGAINST USERS
+            // RFID must be unique across all family members
+            'newMemberRfid' => 'required|string|max:255|unique:family_members,rfid_code',
         ]);
 
-        // Create family and log creation via Auditable trait
-        $family = Family::create([
-            'family_name' => $this->newFamilyName,
-            'account_code' => $this->newAccountCode,
-        ]);
+        $defaultPassword = 'cpac2025'; 
+        $hashedPassword = Hash::make($defaultPassword);
 
-        // AUDIT: creation
-        $this->logCreation($family);
+        // Use a database transaction to ensure all three records are created successfully
+        DB::transaction(function () use ($hashedPassword) {
+            
+            // 1. Create the User (The Head of the Family)
+            $user = User::create([
+                'name' => $this->newMemberName,
+                'email' => $this->newMemberEmail,
+                'password' => $hashedPassword,
+                'usertype' => 'faculty', // Based on your FamilyRegister reference
+            ]);
+
+            // 2. Create the Family
+            $family = Family::create([
+                'family_name' => $this->newFamilyName,
+                'account_code' => $this->newAccountCode,
+            ]);
+
+            // AUDIT: creation of family
+            $this->logCreation($family);
+
+            // 3. Create the FamilyMember Linkage (Head)
+            $member = FamilyMember::create([
+                'user_id' => $user->id, // <-- LINKED TO THE NEW USER
+                'family_id' => $family->id,
+                'name' => $this->newMemberName,
+                'email' => $this->newMemberEmail,
+                'rfid_code' => $this->newMemberRfid,
+                'role' => 'head',
+                // Note: The password field in family_members is not needed since the user_id links to the 'users' table which holds the password. 
+                // However, if the family_members table also has a password column, we can set it here for non-user members, 
+                // but since this is the Head, we rely on the User record.
+            ]);
+
+            // AUDIT: creation of member
+            // We only audit the Family and FamilyMember, assuming the User table auditing is handled elsewhere if needed.
+            $this->logCreation($member);
+            
+            // NOTE: We don't log the user creation here unless the Auditable trait is configured for the User model.
+            
+        });
+
 
         $this->showAddModal = false;
         session()->flash('message', 'Family added successfully.');

@@ -5,7 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
-        <title>{{ (auth()->user()->department->name ?? auth()->user()->usertype) ?? 'System' }} | CREDiT</title>
+        <title>{{ auth()->user()?->department?->name ?? auth()->user()?->usertype ?? 'System' }} | CREDiT</title>
 
         <!-- Favicon -->
         <link rel="icon" type="image/png" href="{{ asset('images/cpac logo.png') }}">
